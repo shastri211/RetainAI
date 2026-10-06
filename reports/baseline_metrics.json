@@ -730,6 +730,59 @@
   },
   "provenance_label": "PUBLIC",
   "report_version": 1,
+  "risk_bands": {
+    "basis": "Cutoffs chosen from the meaning of a calibrated probability (0.25 ~ dataset base rate, 0.50 = more likely than not), not tuned on outcomes. Bands are communication labels, not decision thresholds.",
+    "cutoffs": {
+      "HIGH": 0.5,
+      "MEDIUM": 0.25
+    },
+    "dev_oof": [
+      {
+        "band": "LOW",
+        "churners": 283,
+        "customers": 3223,
+        "observed_churn_rate": 0.087806,
+        "share_of_customers": 0.572062
+      },
+      {
+        "band": "MEDIUM",
+        "churners": 416,
+        "customers": 1181,
+        "observed_churn_rate": 0.352244,
+        "share_of_customers": 0.20962
+      },
+      {
+        "band": "HIGH",
+        "churners": 796,
+        "customers": 1230,
+        "observed_churn_rate": 0.647154,
+        "share_of_customers": 0.218317
+      }
+    ],
+    "holdout": [
+      {
+        "band": "LOW",
+        "churners": 76,
+        "customers": 849,
+        "observed_churn_rate": 0.089517,
+        "share_of_customers": 0.602555
+      },
+      {
+        "band": "MEDIUM",
+        "churners": 91,
+        "customers": 265,
+        "observed_churn_rate": 0.343396,
+        "share_of_customers": 0.188077
+      },
+      {
+        "band": "HIGH",
+        "churners": 207,
+        "customers": 295,
+        "observed_churn_rate": 0.701695,
+        "share_of_customers": 0.209368
+      }
+    ]
+  },
   "shipped_model_analysis": {
     "best_f1_threshold_dev_oof": 0.29,
     "calibration_dev_oof": {

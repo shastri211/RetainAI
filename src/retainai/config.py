@@ -19,3 +19,8 @@ BASELINE_REPORT_NAME = "baseline_metrics.json"
 MODEL_DIR = MODELS_DIR / "churn_baseline"
 
 SEED = 42
+
+# Risk bands on the calibrated churn score. Chosen from the meaning of the scale, not tuned on outcomes:
+# 0.25 is about the dataset base rate (0.265); 0.50 is "more likely than not". They are communication
+# bands, not decision thresholds (threshold analysis lives in reports/baseline_metrics.json).
+RISK_BAND_CUTOFFS = {"MEDIUM": 0.25, "HIGH": 0.50}

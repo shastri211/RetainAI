@@ -13,7 +13,9 @@ from retainai.data.validate import render_text, validate_raw
 from retainai.features.build import DEFAULT_SPEC, derive_features, model_ready_frame
 from retainai.io import write_csv, write_json
 from retainai.models.baseline import run_baseline
-from retainai.models.registry import build_metadata, save_artifacts
+from retainai.models.registry import build_metadata, load_artifacts, save_artifacts
+from retainai.scoring.bands import risk_band_report
+from retainai.scoring.risk import records_to_frame, score_cleaned
 
 
 def _cmd_validate(args: argparse.Namespace) -> int:
@@ -62,13 +64,46 @@ def _cmd_train(args: argparse.Namespace) -> int:
         seed=args.seed,
         n_repeats=args.n_repeats,
     )
-    metadata = build_metadata(run, dataset_sha256=report.dataset_sha256, seed=args.seed)
+    bands = risk_band_report(run.oof, run.holdout_pred)
+    metadata = build_metadata(
+        run, dataset_sha256=report.dataset_sha256, seed=args.seed, extra={"risk_bands": bands}
+    )
     run.report["model_version"] = metadata["model_version"]
+    run.report["risk_bands"] = bands
     write_json(run.report, args.report)
     save_artifacts(run.final_model, metadata, args.model_dir)
     print_training_summary(run, metadata)
     print(f"Report written: {args.report}")
     print(f"Model written:  {args.model_dir}")
+    return 0
+
+
+def _cmd_score(args: argparse.Namespace) -> int:
+    path = Path(args.input)
+    raw = load_raw(path)
+    has_target = "Churn" in raw.columns
+    report = validate_raw(raw, require_target=has_target)
+    if not report.passed:
+        print(render_text(report), file=sys.stderr)
+        return 1
+    cleaned = clean_telco(raw, report, require_target=has_target)
+    model, metadata = load_artifacts(args.model_dir)
+    in_sample = dataset_sha256(path) == metadata["dataset"]["sha256_lf_normalised"]
+    records = score_cleaned(cleaned, model, metadata, in_sample=in_sample)
+
+    out = Path(args.output)
+    if out.suffix.lower() == ".json":
+        write_json([r.model_dump(mode="json") for r in records], out)
+    else:
+        write_csv(records_to_frame(records), out)
+    counts = {band: sum(r.risk_band == band for r in records) for band in ("LOW", "MEDIUM", "HIGH")}
+    print(f"Scored {len(records)} customers with {metadata['model_version']}: {counts}")
+    if in_sample:
+        print(
+            "WARNING: this file is the model's own training data, so these scores are in-sample (optimistic). "
+            "Use out-of-sample customers, or the cross-validated metrics in reports/, to judge quality."
+        )
+    print(f"Scores written: {out}")
     return 0
 
 
@@ -106,6 +141,12 @@ def build_parser() -> argparse.ArgumentParser:
     p_train.add_argument("--seed", type=int, default=config.SEED)
     p_train.add_argument("--n-repeats", type=int, default=3)
     p_train.set_defaults(func=_cmd_train)
+
+    p_score = sub.add_parser("score", help="Generate risk scores for a raw-format customer CSV")
+    p_score.add_argument("--input", default=str(config.RAW_CSV))
+    p_score.add_argument("--model-dir", default=str(config.MODEL_DIR))
+    p_score.add_argument("--output", default=str(config.PROCESSED_DIR / "risk_scores.csv"))
+    p_score.set_defaults(func=_cmd_score)
 
     return parser
 
