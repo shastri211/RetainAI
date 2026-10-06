@@ -696,6 +696,104 @@
     ],
     "version": "b60df969ab14"
   },
+  "global_explanation": {
+    "causal_explanation_available": false,
+    "features": [
+      {
+        "feature": "tenure_months",
+        "mean_abs_contribution_log_odds": 1.262183,
+        "mean_signed_contribution_log_odds": 0.0
+      },
+      {
+        "feature": "total_charges",
+        "mean_abs_contribution_log_odds": 0.575837,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "contract",
+        "mean_abs_contribution_log_odds": 0.522666,
+        "mean_signed_contribution_log_odds": 0.0
+      },
+      {
+        "feature": "monthly_charges",
+        "mean_abs_contribution_log_odds": 0.396329,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "internet_service",
+        "mean_abs_contribution_log_odds": 0.268855,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "online_security",
+        "mean_abs_contribution_log_odds": 0.193265,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "tech_support",
+        "mean_abs_contribution_log_odds": 0.188687,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "paperless_billing",
+        "mean_abs_contribution_log_odds": 0.168632,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "phone_service",
+        "mean_abs_contribution_log_odds": 0.16397,
+        "mean_signed_contribution_log_odds": 0.0
+      },
+      {
+        "feature": "payment_method",
+        "mean_abs_contribution_log_odds": 0.1619,
+        "mean_signed_contribution_log_odds": 0.0
+      },
+      {
+        "feature": "online_backup",
+        "mean_abs_contribution_log_odds": 0.105839,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "multiple_lines",
+        "mean_abs_contribution_log_odds": 0.087043,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "dependents",
+        "mean_abs_contribution_log_odds": 0.081644,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "device_protection",
+        "mean_abs_contribution_log_odds": 0.051135,
+        "mean_signed_contribution_log_odds": 0.0
+      },
+      {
+        "feature": "streaming_movies",
+        "mean_abs_contribution_log_odds": 0.032133,
+        "mean_signed_contribution_log_odds": 0.0
+      },
+      {
+        "feature": "streaming_tv",
+        "mean_abs_contribution_log_odds": 0.024472,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "num_addon_services",
+        "mean_abs_contribution_log_odds": 0.019275,
+        "mean_signed_contribution_log_odds": -0.0
+      },
+      {
+        "feature": "partner",
+        "mean_abs_contribution_log_odds": 0.008344,
+        "mean_signed_contribution_log_odds": 0.0
+      }
+    ],
+    "method": "Exact logistic-regression decomposition: contribution of an original feature = sum of coefficient x (encoded value - training mean) over its encoded columns. Evidence type: MODEL_SIGNAL.",
+    "reference": "average training customer profile (final model, in-sample, descriptive only)",
+    "reference_log_odds": -1.726284
+  },
   "limitations": [
     "Single static snapshot of a fictional company's customers (PUBLIC sample data); no temporal validation is possible.",
     "The churn horizon is undefined, so scores are dataset-specific churn probabilities, not 'probability of leaving within N days'.",

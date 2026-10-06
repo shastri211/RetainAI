@@ -11,6 +11,7 @@ from retainai.data.clean import DataContractError, clean_telco
 from retainai.data.load import dataset_sha256, load_raw
 from retainai.data.validate import render_text, validate_raw
 from retainai.features.build import DEFAULT_SPEC, derive_features, model_ready_frame
+from retainai.explain.linear import LinearExplainer
 from retainai.io import write_csv, write_json
 from retainai.models.baseline import run_baseline
 from retainai.models.registry import build_metadata, load_artifacts, save_artifacts
@@ -68,8 +69,28 @@ def _cmd_train(args: argparse.Namespace) -> int:
     metadata = build_metadata(
         run, dataset_sha256=report.dataset_sha256, seed=args.seed, extra={"risk_bands": bands}
     )
+    explainer = LinearExplainer.from_artifacts(run.final_model, metadata)
+    importance = explainer.global_importance(run.frame[list(run.spec.all)])
+    global_explanation = {
+        "method": (
+            "Exact logistic-regression decomposition: contribution of an original feature = sum of "
+            "coefficient x (encoded value - training mean) over its encoded columns. Evidence type: MODEL_SIGNAL."
+        ),
+        "reference": "average training customer profile (final model, in-sample, descriptive only)",
+        "reference_log_odds": round(explainer.reference_logit, 6),
+        "causal_explanation_available": False,
+        "features": [
+            {
+                "feature": name,
+                "mean_abs_contribution_log_odds": round(float(row.mean_abs_contribution), 6),
+                "mean_signed_contribution_log_odds": round(float(row.mean_signed_contribution), 6),
+            }
+            for name, row in importance.iterrows()
+        ],
+    }
     run.report["model_version"] = metadata["model_version"]
     run.report["risk_bands"] = bands
+    run.report["global_explanation"] = global_explanation
     write_json(run.report, args.report)
     save_artifacts(run.final_model, metadata, args.model_dir)
     print_training_summary(run, metadata)
@@ -89,7 +110,10 @@ def _cmd_score(args: argparse.Namespace) -> int:
     cleaned = clean_telco(raw, report, require_target=has_target)
     model, metadata = load_artifacts(args.model_dir)
     in_sample = dataset_sha256(path) == metadata["dataset"]["sha256_lf_normalised"]
-    records = score_cleaned(cleaned, model, metadata, in_sample=in_sample)
+    explainer = None if args.no_reasons else LinearExplainer.from_artifacts(model, metadata)
+    records = score_cleaned(
+        cleaned, model, metadata, in_sample=in_sample, explainer=explainer, top_k=args.top_k
+    )
 
     out = Path(args.output)
     if out.suffix.lower() == ".json":
@@ -146,6 +170,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_score.add_argument("--input", default=str(config.RAW_CSV))
     p_score.add_argument("--model-dir", default=str(config.MODEL_DIR))
     p_score.add_argument("--output", default=str(config.PROCESSED_DIR / "risk_scores.csv"))
+    p_score.add_argument("--top-k", type=int, default=3, help="Max risk-increasing reasons per customer")
+    p_score.add_argument("--no-reasons", action="store_true", help="Skip model-grounded reasons")
     p_score.set_defaults(func=_cmd_score)
 
     return parser

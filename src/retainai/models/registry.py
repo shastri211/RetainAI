@@ -23,6 +23,7 @@ from sklearn.pipeline import Pipeline
 
 from retainai import __version__
 from retainai.data import schema
+from retainai.explain.linear import reference_means
 from retainai.io import write_json
 from retainai.models.baseline import BaselineRun
 from retainai.models.candidates import ESTIMATOR_FACTORIES
@@ -109,6 +110,9 @@ def build_metadata(
             "numpy": np.__version__,
         },
         "limitations": run.report["limitations"],
+        # Average training profile, needed to reproduce exact contributions at scoring time.
+        "explanation_method": "linear_exact_contributions",
+        "explanation_reference": reference_means(run.final_model, run.frame[list(run.spec.all)]),
     }
     if extra:
         metadata.update(extra)
