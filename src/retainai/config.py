@@ -15,5 +15,7 @@ REPORTS_DIR = ROOT / "reports"
 CLEANED_CSV_NAME = "telco_cleaned.csv"
 FEATURES_CSV_NAME = "telco_features.csv"
 VALIDATION_REPORT_NAME = "data_validation.json"
+BASELINE_REPORT_NAME = "baseline_metrics.json"
+MODEL_DIR = MODELS_DIR / "churn_baseline"
 
 SEED = 42

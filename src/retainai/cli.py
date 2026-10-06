@@ -12,6 +12,8 @@ from retainai.data.load import dataset_sha256, load_raw
 from retainai.data.validate import render_text, validate_raw
 from retainai.features.build import DEFAULT_SPEC, derive_features, model_ready_frame
 from retainai.io import write_csv, write_json
+from retainai.models.baseline import run_baseline
+from retainai.models.registry import build_metadata, save_artifacts
 
 
 def _cmd_validate(args: argparse.Namespace) -> int:
@@ -45,6 +47,44 @@ def _cmd_prepare(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_train(args: argparse.Namespace) -> int:
+    path = Path(args.input)
+    raw = load_raw(path)
+    report = validate_raw(raw)
+    report.dataset_sha256 = dataset_sha256(path)
+    if not report.passed:
+        print(render_text(report), file=sys.stderr)
+        return 1
+    cleaned = clean_telco(raw, report)
+    run = run_baseline(
+        cleaned,
+        dataset_sha256=report.dataset_sha256,
+        seed=args.seed,
+        n_repeats=args.n_repeats,
+    )
+    metadata = build_metadata(run, dataset_sha256=report.dataset_sha256, seed=args.seed)
+    run.report["model_version"] = metadata["model_version"]
+    write_json(run.report, args.report)
+    save_artifacts(run.final_model, metadata, args.model_dir)
+    print_training_summary(run, metadata)
+    print(f"Report written: {args.report}")
+    print(f"Model written:  {args.model_dir}")
+    return 0
+
+
+def print_training_summary(run, metadata: dict) -> None:
+    print(f"Model version: {metadata['model_version']} ({metadata['model_type']})")
+    print(f"{'candidate':<24}{'CV ROC-AUC':>12}{'CV PR-AUC':>12}{'holdout ROC':>13}{'holdout PR':>12}")
+    for name, entry in run.report["candidates"].items():
+        cv, ho = entry["cv"], entry["holdout"]["ranking"]
+        print(f"{name:<24}{cv['roc_auc']['mean']:>12.4f}{cv['pr_auc']['mean']:>12.4f}{ho['roc_auc']:>13.4f}{ho['pr_auc']:>12.4f}")
+    sel = run.report["model_selection"]
+    print(
+        f"Shipped: {sel['shipped_model']}; best benchmark by CV PR-AUC: {sel['best_by_cv_pr_auc']} "
+        f"(gap {sel['pr_auc_gap_best_minus_shipped']}); exceeds by >1 SD: {sel['benchmark_exceeds_shipped_by_more_than_1sd']}"
+    )
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="retainai", description="RetainAI Phase 1 foundation pipeline")
     sub = parser.add_subparsers(dest="command", required=True)
@@ -58,6 +98,14 @@ def build_parser() -> argparse.ArgumentParser:
     p_prep.add_argument("--input", default=str(config.RAW_CSV))
     p_prep.add_argument("--out-dir", default=str(config.PROCESSED_DIR))
     p_prep.set_defaults(func=_cmd_prepare)
+
+    p_train = sub.add_parser("train", help="Train and evaluate baseline models; save the shipped model")
+    p_train.add_argument("--input", default=str(config.RAW_CSV))
+    p_train.add_argument("--model-dir", default=str(config.MODEL_DIR))
+    p_train.add_argument("--report", default=str(config.REPORTS_DIR / config.BASELINE_REPORT_NAME))
+    p_train.add_argument("--seed", type=int, default=config.SEED)
+    p_train.add_argument("--n-repeats", type=int, default=3)
+    p_train.set_defaults(func=_cmd_train)
 
     return parser
 

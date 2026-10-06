@@ -95,3 +95,55 @@ def real_raw() -> pd.DataFrame:
 @pytest.fixture(scope="session")
 def real_csv_path() -> Path:
     return REAL_CSV
+
+
+def synthetic_raw(n: int = 400, seed: int = 0, n_duplicates: int = 6, shuffle_labels: bool = False) -> pd.DataFrame:
+    """A valid raw-style table with a learnable churn signal (month-to-month, short tenure, high price)."""
+    import numpy as np
+
+    rng = np.random.default_rng(seed)
+    rows = []
+    for i in range(n):
+        tenure = int(rng.integers(0, 73))
+        monthly = round(float(rng.uniform(20, 110)), 2)
+        contract = str(rng.choice(["Month-to-month", "One year", "Two year"], p=[0.55, 0.25, 0.20]))
+        internet = str(rng.choice(["DSL", "Fiber optic", "No"], p=[0.35, 0.45, 0.20]))
+        phone = str(rng.choice(["Yes", "No"], p=[0.9, 0.1]))
+        addon = "No internet service" if internet == "No" else None
+        row = make_row(
+            customerID=f"{i:04d}-ABCDE",
+            gender=str(rng.choice(["Female", "Male"])),
+            SeniorCitizen=str(int(rng.random() < 0.16)),
+            Partner=str(rng.choice(["Yes", "No"])),
+            Dependents=str(rng.choice(["Yes", "No"])),
+            tenure=str(tenure),
+            PhoneService=phone,
+            MultipleLines="No phone service" if phone == "No" else str(rng.choice(["Yes", "No"])),
+            InternetService=internet,
+            Contract=contract,
+            PaperlessBilling=str(rng.choice(["Yes", "No"])),
+            PaymentMethod=str(rng.choice(sorted(schema.RAW_CATEGORICAL_DOMAINS["PaymentMethod"]))),
+            MonthlyCharges=f"{monthly:.2f}",
+            TotalCharges=" " if tenure == 0 else f"{tenure * monthly * float(rng.uniform(0.9, 1.1)):.2f}",
+        )
+        for col in schema.INTERNET_ADDON_COLUMNS:
+            row[col] = addon or str(rng.choice(["Yes", "No"]))
+        logit = -1.2 + 1.8 * (contract == "Month-to-month") - 0.04 * tenure + 0.015 * (monthly - 65)
+        row["Churn"] = "Yes" if rng.random() < 1 / (1 + np.exp(-logit)) else "No"
+        rows.append(row)
+    # identical-profile rows with new IDs (like the real file's tenure-1 collisions)
+    for j in range(n_duplicates):
+        clone = dict(rows[j])
+        clone["customerID"] = f"{n + j:04d}-ABCDE"
+        rows.append(clone)
+    df = pd.DataFrame(rows, columns=list(schema.RAW_COLUMNS)).astype(str)
+    if shuffle_labels:
+        df["Churn"] = rng.permutation(df["Churn"].to_numpy())
+    return df
+
+
+@pytest.fixture(scope="session")
+def synthetic_cleaned() -> pd.DataFrame:
+    from retainai.data.clean import clean_telco
+
+    return clean_telco(synthetic_raw())
