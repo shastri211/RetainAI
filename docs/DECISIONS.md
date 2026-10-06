@@ -122,3 +122,9 @@ Nothing here has been implemented. Each entry names the phase it blocks.
 
 **Decision:** MVP = evidence tier 1: Telco-only, assumed effects with visible badges, full loop through human approval, no causal claims (PRD §16). V1 adds uplift on simulated/public data and outcome measurement.
 **Why:** it is the largest product the data supports honestly.
+
+## D-18 — Phase 1 corrections to Phase 0 findings  · Proposed (factual correction)
+
+1. **Contract vs tenure.** Phase 0 read 142 two-year contracts with tenure < 24 as a sign that `Contract` may not span the full tenure. That is an over-reading: such customers are plausibly inside their first term (none of the 142 churned; 8 of 102 one-year customers under 12 months churned). The genuine open question is the time reference of `Contract`, handled by an ablation.
+2. **Duplicates.** All 20 duplicate groups (22 extra rows) are at `tenure = 1`, where `TotalCharges = MonthlyCharges` in all 613 rows. They are consistent with coincidence between distinct customers; rows are kept and splits remain group-aware as a precaution.
+3. **Survival-based CLV withdrawn.** The data is a single snapshot with an undefined churn horizon and unknown sampling design, so a survival model's at-risk sets cannot be validated and extrapolation would invent a horizon. Value is limited to observed revenue, risk-weighted revenue-at-risk, and an explicit, configurable assumption-based proxy.

@@ -68,7 +68,7 @@ Style: **modular monolith**, one Python package (`src/retainai/`). No microservi
 | pandas, scikit-learn | Data handling, baselines, calibration, metrics. | **Adopt (Phase 1–2)** |
 | Gradient boosting (LightGBM or XGBoost) | Only if it beats logistic regression beyond CV noise (ML-01). | **Conditional** |
 | SHAP (or model coefficients for linear models) | Needed for per-customer drivers (UC2). | **Adopt (Phase 3)** |
-| lifelines (survival) | Needed for CLV proxy from `tenure` + `Churn` (ML-06). | **Conditional on validation** |
+| lifelines (survival) | Was proposed for a CLV proxy; the snapshot data cannot validate a survival model (D-18). | **Not adopted** |
 | Uplift libraries (scikit-uplift / CausalML / EconML) or plain scikit-learn meta-learners | Needed only in Phase 7. Choose then; scikit-learn T-/S-learners plus own Qini may suffice. | **Defer** |
 | pydantic | Typed schemas for data contract, recommendation object, LLM output validation. | **Adopt** |
 | pytest | Required for acceptance criteria. | **Adopt** |

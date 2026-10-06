@@ -35,12 +35,12 @@ All numbers below were computed directly from the CSV in this session. No depend
 | Unique `customerID` | 7,043 (no duplicate IDs) |
 | Churn = Yes | 1,869 (26.54%) |
 | Blank `TotalCharges` (stored as `" "`, so the column parses as text) | 11 rows; all have `tenure = 0` and `Churn = No` |
-| Rows identical to another row on all 20 non-ID columns | 22 extra rows in 20 groups (likely coincidence among low-cardinality fields; unverified) |
+| Rows identical to another row on all 20 non-ID columns | 22 extra rows in 20 groups. All 20 groups have `tenure = 1`, where `TotalCharges = MonthlyCharges` in all 613 such rows, so three numeric fields collapse into one; consistent with coincidence between distinct customers (checked in Phase 1) |
 | `MultipleLines = "No phone service"` exactly when `PhoneService = No` | 682 of 682 (structural redundancy) |
 | Add-on services = `"No internet service"` exactly when `InternetService = No` | 0 exceptions either way (structural redundancy) |
 | Whitespace/padding issues in string fields other than the blank `TotalCharges` | 0 |
 | Monthly revenue held by churned customers, as a share of all monthly revenue in the file | 30.5% (139,131 of 456,117; fictional currency units, dataset-internal) |
-| Two-year contract customers with `tenure < 24` months | 142 |
+| Two-year contract customers with `tenure < 24` months | 142 (none churned); one-year with `tenure < 12`: 102 (8 churned). Consistent with customers still inside their first contract term; not an inconsistency (corrected in Phase 1) |
 | `TotalCharges` within 2% of `tenure × MonthlyCharges` | 50% of non-blank rows (5th–95th percentile of relative deviation ≈ −7.6% to +7.5%; range −31% to +57%) |
 
 Churn rate by segment (rows, churn %):
@@ -59,7 +59,7 @@ Interpretation notes:
 
 - Churned customers have a median tenure of 10 months and a median monthly charge of 79.65, versus 29 months and 70.35 for the whole file (notebook 01 output, `describe`). Churn is concentrated among new, higher-paying, month-to-month, fiber, electronic-check customers.
 - Gender shows almost no difference in churn (26.9% vs 26.2%), so it carries little predictive value and is a fairness hazard. Senior-citizen status carries signal but is a protected-class proxy (age). See DECISIONS.md D-14.
-- The 142 two-year contracts with tenure under 24 months show that `Contract` is not necessarily the contract the customer held for their whole tenure; its time reference is undocumented. Treat it as a possible source of leakage until explained.
+- Two-year contracts with tenure under 24 months are plausible (customer still within the first term) and are not flagged as errors. What remains undocumented is the *time reference* of `Contract` (at sign-up, at snapshot, or at churn). Treat it as a possible source of leakage and test reliance on it with an ablation. (Phase 0 originally read the 142 rows as evidence of inconsistency; that was an over-reading, corrected in Phase 1, DECISIONS.md D-18.)
 - `TotalCharges` is only loosely reproducible from `tenure × MonthlyCharges` (prices change, or the generator is noisy). It is partly redundant with `tenure`, so it needs a collinearity check in modelling.
 
 ## 4. Capability matrix — what this dataset can honestly support
@@ -71,7 +71,7 @@ Interpretation notes:
 | Segmentation | **Yes** | Rich categorical and tenure/charge fields. |
 | Explainability | **Yes, associational only** | Feature attributions describe what the model uses, not what causes churn. Product wording must say so. |
 | Customer prioritisation | **Partly** | Risk × revenue (`MonthlyCharges`) is available. This is *revenue at risk*, not "worth intervening on", which needs an effect estimate. |
-| Customer lifetime value | **Partly (proxy only)** | `tenure` + `Churn` form right-censored survival data (duration, event), so survival-based expected remaining revenue is possible under stated assumptions. There is no margin, cost-to-serve or discount rate. Any CLV is a labelled revenue proxy. |
+| Customer lifetime value | **Proxy only; no survival model** | There is no margin, cost-to-serve or discount rate, and the churn horizon is undefined. A survival/Kaplan-Meier estimate from `tenure` + `Churn` was considered in Phase 0 but is not defensible: this is a single snapshot of unknown sampling design, so the at-risk sets cannot be validated and any extrapolation needs an undocumented follow-up window (DECISIONS.md D-18). Value is limited to observed monthly revenue, a risk-weighted revenue-at-risk, and an explicit assumption-based proxy. |
 | Intervention recommendation | **Not from data** | No intervention was ever recorded. Recommendations can only come from policy rules plus *assumed* effects. |
 | Uplift / treatment-effect modelling | **No** | No treatment indicator, no control group, no post-treatment outcome. |
 | Causal inference about interventions | **No** | Observational cross-section; no assignment mechanism; observable "treatments" such as tech support or contract type are self-selected. Differences in churn between them are associations. |

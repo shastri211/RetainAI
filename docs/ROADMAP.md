@@ -50,11 +50,11 @@ Milestones:
 
 - **Objective:** per-customer and global explanations, segments, and revenue-at-risk.
 - **Inputs:** Phase 2 model.
-- **Deliverables:** global importance and per-customer drivers with "association, not cause" wording; segmentation tables; revenue-at-risk; survival-based CLV proxy if its validation passes, else a simple stated formula; fairness audit by gender and senior-citizen status; analyst demo notebook/CLI; completion of the EDA findings in notebook 02 reconciled with model results.
+- **Deliverables:** global importance and per-customer drivers with "association, not cause" wording; segmentation tables; revenue-at-risk; assumption-labelled value proxies (survival CLV not adopted, D-18); fairness audit by gender and senior-citizen status; analyst demo notebook/CLI; completion of the EDA findings in notebook 02 reconciled with model results.
 - **Dependencies:** Phase 2.
 - **Acceptance criteria:** explanation stability check across CV folds; every CLV assumption listed and each output labelled "proxy"; fairness metrics reported with decisions recorded; reviewer can reproduce a customer's drivers from stored artefacts.
 - **Risks:** explanations mistaken for causal advice; CLV proxy overread.
-- **Approve before starting:** CLV approach (survival vs simple), wording standards.
+- **Approve before starting:** value-proxy assumptions (assumed months), wording standards.
 
 ## Phase 4 — Policy & Knowledge
 

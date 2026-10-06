@@ -102,7 +102,7 @@ Dataset-internal sizing only (fictional data): churned customers hold 30.5% of t
 - **ML-03** Calibrate probabilities (e.g. isotonic or Platt) and verify on held-out data.
 - **ML-04** Leakage review of every feature (notably `Contract`, `TotalCharges`; DATA_STRATEGY.md §3).
 - **ML-05** Fairness audit by gender and senior-citizen status (error rates, selection rates) before recommendations ship.
-- **ML-06** Survival-style expected remaining revenue as CLV proxy, with assumptions listed. [MVP, if validation passes]
+- **ML-06** Value proxies from observed `MonthlyCharges` only: monthly revenue, risk-weighted revenue-at-risk, and a CLV proxy using an explicit, configurable assumed number of months, labelled ASSUMED. A survival-based CLV is not adopted (DECISIONS.md D-18). [MVP]
 - **ML-07** Uplift models only on randomized data (public Hillstrom for method validation; SIMULATED layer for pipeline), evaluated with Qini/AUUC and uplift-at-k; no uplift claim on Telco without randomized treatment data. [V1]
 - **ML-08** No LLM produces, alters or "estimates" a model number.
 - **ML-09** Model artefacts versioned with metrics, data hash, git commit.
