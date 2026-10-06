@@ -1,0 +1,2510 @@
+{
+  "attribute_roles": {
+    "dependents": {
+      "role": "sensitive-adjacent: used in model and audited",
+      "used_in_model": true
+    },
+    "gender": {
+      "role": "protected: audit only",
+      "used_in_model": false
+    },
+    "partner": {
+      "role": "sensitive-adjacent: used in model and audited",
+      "used_in_model": true
+    },
+    "senior_citizen": {
+      "role": "protected: audit only",
+      "used_in_model": false
+    }
+  },
+  "caveats": [
+    "This audit describes model behaviour on PUBLIC sample data for a fictional company. It does not establish fairness or its absence.",
+    "Selection-rate differences are expected when observed churn rates differ; they are context, not proof of bias.",
+    "Error-rate and calibration gaps are descriptive; their importance depends on how scores will be used, which is undecided.",
+    "Intervals are bootstrap percentile intervals over customers and exclude model-fitting uncertainty.",
+    "Only the listed attributes can be audited; other attributes and intersections of groups are not covered.",
+    "Excluding an attribute from the model does not remove proxies for it (e.g. tenure, partner, dependents may correlate with age)."
+  ],
+  "evaluation_sets": {
+    "dev_oof": {
+      "attributes": {
+        "dependents": {
+          "differences": {
+            "Yes_minus_No": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.019292,
+                  0.01913
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.000224
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  -0.213013,
+                  -0.168591
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.191377
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  -0.123904,
+                  -0.092688
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.107553
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  -0.168364,
+                  -0.144506
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.156434
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  -0.177185,
+                  -0.134458
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.156209
+              },
+              "pr_auc": {
+                "ci95": [
+                  -0.218019,
+                  -0.075581
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.148222
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  -0.117192,
+                  -0.000507
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.052964
+              },
+              "precision@high_band": {
+                "ci95": [
+                  -0.098798,
+                  0.078475
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.009033
+              },
+              "roc_auc": {
+                "ci95": [
+                  -0.002952,
+                  0.04953
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.023998
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  -0.290809,
+                  -0.242348
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.26582
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  -0.216332,
+                  -0.1785
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.197335
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  -0.238504,
+                  -0.121728
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.179352
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  -0.308674,
+                  -0.178791
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.248786
+              }
+            }
+          },
+          "groups": {
+            "No": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.011931,
+                    0.01262
+                  ],
+                  "estimate": 6.2e-05
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.297216,
+                    0.330199
+                  ],
+                  "estimate": 0.313898
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.128735,
+                    0.154029
+                  ],
+                  "estimate": 0.141547
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.304206,
+                    0.319149
+                  ],
+                  "estimate": 0.311774
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.297192,
+                    0.325606
+                  ],
+                  "estimate": 0.311711
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.640241,
+                    0.697494
+                  ],
+                  "estimate": 0.671372
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.514836,
+                    0.558665
+                  ],
+                  "estimate": 0.536546
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.619596,
+                    0.674597
+                  ],
+                  "estimate": 0.648131
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.811893,
+                    0.83677
+                  ],
+                  "estimate": 0.82458
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.452164,
+                    0.480818
+                  ],
+                  "estimate": 0.466179
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.263876,
+                    0.290642
+                  ],
+                  "estimate": 0.27688
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.781047,
+                    0.823021
+                  ],
+                  "estimate": 0.802429
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.548542,
+                    0.604086
+                  ],
+                  "estimate": 0.575709
+                }
+              },
+              "n": 3962,
+              "n_churned": 1235,
+              "status": "ok"
+            },
+            "Yes": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.01436,
+                    0.015155
+                  ],
+                  "estimate": -0.000162
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.105725,
+                    0.138613
+                  ],
+                  "estimate": 0.122521
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.025272,
+                    0.044886
+                  ],
+                  "estimate": 0.033994
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.146548,
+                    0.163569
+                  ],
+                  "estimate": 0.15534
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.13904,
+                    0.173445
+                  ],
+                  "estimate": 0.155502
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.460006,
+                    0.58968
+                  ],
+                  "estimate": 0.52315
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.429022,
+                    0.531215
+                  ],
+                  "estimate": 0.483582
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.552846,
+                    0.719416
+                  ],
+                  "estimate": 0.639098
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.82524,
+                    0.869717
+                  ],
+                  "estimate": 0.848578
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.18122,
+                    0.219214
+                  ],
+                  "estimate": 0.200359
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.066986,
+                    0.093301
+                  ],
+                  "estimate": 0.079545
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.563011,
+                    0.680797
+                  ],
+                  "estimate": 0.623077
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.27238,
+                    0.386557
+                  ],
+                  "estimate": 0.326923
+                }
+              },
+              "n": 1672,
+              "n_churned": 260,
+              "status": "ok"
+            }
+          }
+        },
+        "gender": {
+          "differences": {
+            "Male_minus_Female": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.016845,
+                  0.023216
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.004057
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  -0.030898,
+                  0.019521
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.004438
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  -0.029109,
+                  0.008167
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.009248
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  -0.018769,
+                  0.006773
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.006036
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  -0.03292,
+                  0.014712
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.010093
+              },
+              "pr_auc": {
+                "ci95": [
+                  -0.057726,
+                  0.05293
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.001242
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  -0.054124,
+                  0.032805
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.008802
+              },
+              "precision@high_band": {
+                "ci95": [
+                  -0.057195,
+                  0.055236
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.000185
+              },
+              "roc_auc": {
+                "ci95": [
+                  -0.027081,
+                  0.017128
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.003148
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  -0.033496,
+                  0.014454
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.008819
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  -0.037124,
+                  0.004565
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.01637
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  -0.042831,
+                  0.038044
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.001076
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  -0.072414,
+                  0.028133
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.019828
+              }
+            }
+          },
+          "groups": {
+            "Female": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.01484,
+                    0.01107
+                  ],
+                  "estimate": -0.002043
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.233665,
+                    0.269841
+                  ],
+                  "estimate": 0.250856
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.097133,
+                    0.123063
+                  ],
+                  "estimate": 0.109535
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.260065,
+                    0.277103
+                  ],
+                  "estimate": 0.268382
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.254709,
+                    0.286158
+                  ],
+                  "estimate": 0.270425
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.61447,
+                    0.686678
+                  ],
+                  "estimate": 0.6501
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.50133,
+                    0.561282
+                  ],
+                  "estimate": 0.532787
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.611417,
+                    0.685173
+                  ],
+                  "estimate": 0.647244
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.826238,
+                    0.857765
+                  ],
+                  "estimate": 0.841534
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.374599,
+                    0.411006
+                  ],
+                  "estimate": 0.391723
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.211559,
+                    0.241001
+                  ],
+                  "estimate": 0.226543
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.744685,
+                    0.801226
+                  ],
+                  "estimate": 0.771768
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.506494,
+                    0.576465
+                  ],
+                  "estimate": 0.542216
+                }
+              },
+              "n": 2803,
+              "n_churned": 758,
+              "status": "ok"
+            },
+            "Male": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.012944,
+                    0.017639
+                  ],
+                  "estimate": 0.002014
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.227987,
+                    0.263876
+                  ],
+                  "estimate": 0.246418
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.08723,
+                    0.112765
+                  ],
+                  "estimate": 0.100287
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.252825,
+                    0.271156
+                  ],
+                  "estimate": 0.262346
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.244066,
+                    0.277994
+                  ],
+                  "estimate": 0.260332
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.607296,
+                    0.685081
+                  ],
+                  "estimate": 0.648858
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.493009,
+                    0.556576
+                  ],
+                  "estimate": 0.523985
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.605269,
+                    0.685352
+                  ],
+                  "estimate": 0.647059
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.823309,
+                    0.852925
+                  ],
+                  "estimate": 0.838386
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.36541,
+                    0.400918
+                  ],
+                  "estimate": 0.382904
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.193924,
+                    0.225009
+                  ],
+                  "estimate": 0.210173
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.73814,
+                    0.80016
+                  ],
+                  "estimate": 0.770692
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.483318,
+                    0.557099
+                  ],
+                  "estimate": 0.522388
+                }
+              },
+              "n": 2831,
+              "n_churned": 737,
+              "status": "ok"
+            }
+          }
+        },
+        "partner": {
+          "differences": {
+            "Yes_minus_No": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.020526,
+                  0.01817
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.000409
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  -0.197982,
+                  -0.14328
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.172103
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  -0.114387,
+                  -0.075682
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.09429
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  -0.144742,
+                  -0.120023
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.132565
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  -0.154631,
+                  -0.109947
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.132155
+              },
+              "pr_auc": {
+                "ci95": [
+                  -0.165604,
+                  -0.048442
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.108982
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  -0.078546,
+                  0.008451
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.034325
+              },
+              "precision@high_band": {
+                "ci95": [
+                  -0.068628,
+                  0.052321
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.011975
+              },
+              "roc_auc": {
+                "ci95": [
+                  0.007994,
+                  0.055042
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.031511
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  -0.248235,
+                  -0.197789
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.223604
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  -0.183827,
+                  -0.140227
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.163222
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  -0.165862,
+                  -0.071098
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.115588
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  -0.205061,
+                  -0.104761
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.154139
+              }
+            }
+          },
+          "groups": {
+            "No": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.014514,
+                    0.014155
+                  ],
+                  "estimate": 0.000191
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.31672,
+                    0.359388
+                  ],
+                  "estimate": 0.338384
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.137663,
+                    0.169432
+                  ],
+                  "estimate": 0.15404
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.319325,
+                    0.337647
+                  ],
+                  "estimate": 0.328549
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.312076,
+                    0.344819
+                  ],
+                  "estimate": 0.328358
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.654694,
+                    0.71428
+                  ],
+                  "estimate": 0.684534
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.514411,
+                    0.565756
+                  ],
+                  "estimate": 0.539835
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.621726,
+                    0.679432
+                  ],
+                  "estimate": 0.65063
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.802698,
+                    0.833475
+                  ],
+                  "estimate": 0.819075
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.47472,
+                    0.511372
+                  ],
+                  "estimate": 0.493894
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.279172,
+                    0.312288
+                  ],
+                  "estimate": 0.296133
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.790015,
+                    0.837037
+                  ],
+                  "estimate": 0.811983
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.556139,
+                    0.616346
+                  ],
+                  "estimate": 0.586777
+                }
+              },
+              "n": 2948,
+              "n_churned": 968,
+              "status": "ok"
+            },
+            "Yes": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.012991,
+                    0.012472
+                  ],
+                  "estimate": -0.000218
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.151351,
+                    0.182182
+                  ],
+                  "estimate": 0.166281
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.048385,
+                    0.069616
+                  ],
+                  "estimate": 0.05975
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.187311,
+                    0.204177
+                  ],
+                  "estimate": 0.195984
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.181115,
+                    0.210173
+                  ],
+                  "estimate": 0.196203
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.532027,
+                    0.62471
+                  ],
+                  "estimate": 0.575552
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.465469,
+                    0.541123
+                  ],
+                  "estimate": 0.50551
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.583279,
+                    0.692737
+                  ],
+                  "estimate": 0.638655
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.833286,
+                    0.867475
+                  ],
+                  "estimate": 0.850586
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.253537,
+                    0.287612
+                  ],
+                  "estimate": 0.27029
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.12043,
+                    0.145942
+                  ],
+                  "estimate": 0.132911
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.657589,
+                    0.738213
+                  ],
+                  "estimate": 0.696395
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.391078,
+                    0.474996
+                  ],
+                  "estimate": 0.432638
+                }
+              },
+              "n": 2686,
+              "n_churned": 527,
+              "status": "ok"
+            }
+          }
+        },
+        "senior_citizen": {
+          "differences": {
+            "1_minus_0": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.068173,
+                  -0.009151
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.039081
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  0.159896,
+                  0.245034
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.204366
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  0.091183,
+                  0.158161
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.125535
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  0.134136,
+                  0.167856
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.150573
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  0.157438,
+                  0.223984
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.189655
+              },
+              "pr_auc": {
+                "ci95": [
+                  0.060149,
+                  0.165433
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.110499
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  0.041822,
+                  0.133404
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.087377
+              },
+              "precision@high_band": {
+                "ci95": [
+                  0.003872,
+                  0.117229
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.057712
+              },
+              "roc_auc": {
+                "ci95": [
+                  -0.077471,
+                  -0.013572
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.044923
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  0.226021,
+                  0.292064
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.25983
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  0.176652,
+                  0.246211
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.211549
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  0.057092,
+                  0.144838
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.101708
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  0.090031,
+                  0.202061
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.146963
+              }
+            }
+          },
+          "groups": {
+            "0": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.003108,
+                    0.016644
+                  ],
+                  "estimate": 0.006287
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.21003,
+                    0.236419
+                  ],
+                  "estimate": 0.222837
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.080324,
+                    0.097468
+                  ],
+                  "estimate": 0.089024
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.234572,
+                    0.248161
+                  ],
+                  "estimate": 0.241109
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.223186,
+                    0.245822
+                  ],
+                  "estimate": 0.234821
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.589007,
+                    0.649646
+                  ],
+                  "estimate": 0.618515
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.483684,
+                    0.530546
+                  ],
+                  "estimate": 0.50643
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.601616,
+                    0.659097
+                  ],
+                  "estimate": 0.63031
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.828669,
+                    0.853655
+                  ],
+                  "estimate": 0.840873
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.331167,
+                    0.36007
+                  ],
+                  "estimate": 0.345462
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.174085,
+                    0.195695
+                  ],
+                  "estimate": 0.184261
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.720207,
+                    0.771232
+                  ],
+                  "estimate": 0.745045
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.467137,
+                    0.523414
+                  ],
+                  "estimate": 0.494595
+                }
+              },
+              "n": 4727,
+              "n_churned": 1110,
+              "status": "ok"
+            },
+            "1": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.059639,
+                    -0.004567
+                  ],
+                  "estimate": -0.032794
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.383489,
+                    0.465915
+                  ],
+                  "estimate": 0.427203
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.182946,
+                    0.247618
+                  ],
+                  "estimate": 0.214559
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.37591,
+                    0.407054
+                  ],
+                  "estimate": 0.391682
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.394708,
+                    0.457552
+                  ],
+                  "estimate": 0.424476
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.683351,
+                    0.774509
+                  ],
+                  "estimate": 0.729014
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.555025,
+                    0.630797
+                  ],
+                  "estimate": 0.593807
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.642722,
+                    0.738828
+                  ],
+                  "estimate": 0.688022
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.767727,
+                    0.825569
+                  ],
+                  "estimate": 0.79595
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.57274,
+                    0.637266
+                  ],
+                  "estimate": 0.605292
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.364939,
+                    0.428363
+                  ],
+                  "estimate": 0.39581
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.807727,
+                    0.884423
+                  ],
+                  "estimate": 0.846753
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.58915,
+                    0.693548
+                  ],
+                  "estimate": 0.641558
+                }
+              },
+              "n": 907,
+              "n_churned": 385,
+              "status": "ok"
+            }
+          }
+        }
+      },
+      "n_customers": 5634
+    },
+    "holdout": {
+      "attributes": {
+        "dependents": {
+          "differences": {
+            "Yes_minus_No": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.026868,
+                  0.042018
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.00484
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  -0.23146,
+                  -0.146677
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.193475
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  -0.112108,
+                  -0.052992
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.082372
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  -0.184173,
+                  -0.140624
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.161674
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  -0.213273,
+                  -0.128543
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.166514
+              },
+              "pr_auc": {
+                "ci95": [
+                  -0.318799,
+                  -0.059913
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.193858
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  -0.1752,
+                  0.050984
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.060538
+              },
+              "precision@high_band": {
+                "ci95": [
+                  -0.299908,
+                  0.070869
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.113208
+              },
+              "roc_auc": {
+                "ci95": [
+                  -0.039392,
+                  0.056075
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.008972
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  -0.332771,
+                  -0.241971
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.285804
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  -0.242908,
+                  -0.16813
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.204422
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  -0.383268,
+                  -0.120952
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.23593
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  -0.460325,
+                  -0.223964
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.340909
+              }
+            }
+          },
+          "groups": {
+            "No": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.036831,
+                    0.007331
+                  ],
+                  "estimate": -0.014235
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.260596,
+                    0.330279
+                  ],
+                  "estimate": 0.295626
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.08943,
+                    0.137959
+                  ],
+                  "estimate": 0.11463
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.287613,
+                    0.316544
+                  ],
+                  "estimate": 0.302964
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.290911,
+                    0.345005
+                  ],
+                  "estimate": 0.317199
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.667459,
+                    0.774295
+                  ],
+                  "estimate": 0.713499
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.520081,
+                    0.605592
+                  ],
+                  "estimate": 0.560538
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.666667,
+                    0.769536
+                  ],
+                  "estimate": 0.713208
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.827277,
+                    0.87987
+                  ],
+                  "estimate": 0.852302
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.429454,
+                    0.490216
+                  ],
+                  "estimate": 0.45932
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.245597,
+                    0.300721
+                  ],
+                  "estimate": 0.272915
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.762127,
+                    0.854673
+                  ],
+                  "estimate": 0.811688
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.560567,
+                    0.667769
+                  ],
+                  "estimate": 0.613636
+                }
+              },
+              "n": 971,
+              "n_churned": 308,
+              "status": "ok"
+            },
+            "Yes": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.036713,
+                    0.019936
+                  ],
+                  "estimate": -0.009395
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.071976,
+                    0.135938
+                  ],
+                  "estimate": 0.102151
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.017409,
+                    0.051148
+                  ],
+                  "estimate": 0.032258
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.125122,
+                    0.158256
+                  ],
+                  "estimate": 0.14129
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.116438,
+                    0.180365
+                  ],
+                  "estimate": 0.150685
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.409248,
+                    0.634717
+                  ],
+                  "estimate": 0.519641
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.385677,
+                    0.608108
+                  ],
+                  "estimate": 0.5
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.434022,
+                    0.77211
+                  ],
+                  "estimate": 0.6
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.818011,
+                    0.900822
+                  ],
+                  "estimate": 0.861274
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.139269,
+                    0.210046
+                  ],
+                  "estimate": 0.173516
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.045662,
+                    0.092523
+                  ],
+                  "estimate": 0.068493
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.455303,
+                    0.687805
+                  ],
+                  "estimate": 0.575758
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.16552,
+                    0.381688
+                  ],
+                  "estimate": 0.272727
+                }
+              },
+              "n": 438,
+              "n_churned": 66,
+              "status": "ok"
+            }
+          }
+        },
+        "gender": {
+          "differences": {
+            "Male_minus_Female": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.035512,
+                  0.038816
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.001593
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  -0.030242,
+                  0.078757
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.026869
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  -0.052064,
+                  0.018162
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.016041
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  -0.021232,
+                  0.02807
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.003935
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  -0.041684,
+                  0.044924
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.002341
+              },
+              "pr_auc": {
+                "ci95": [
+                  -0.100919,
+                  0.093926
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.010645
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  -0.133033,
+                  0.035104
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.049194
+              },
+              "precision@high_band": {
+                "ci95": [
+                  -0.075827,
+                  0.130981
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.026536
+              },
+              "roc_auc": {
+                "ci95": [
+                  -0.056984,
+                  0.025869
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.017709
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  -0.04845,
+                  0.054665
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.002204
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  -0.069248,
+                  0.022354
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.021543
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  -0.150828,
+                  0.011578
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.070879
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  -0.14889,
+                  0.058307
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.040907
+              }
+            }
+          },
+          "groups": {
+            "Female": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.037953,
+                    0.012654
+                  ],
+                  "estimate": -0.013549
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.177123,
+                    0.250261
+                  ],
+                  "estimate": 0.212302
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.068753,
+                    0.118748
+                  ],
+                  "estimate": 0.093254
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.232148,
+                    0.270411
+                  ],
+                  "estimate": 0.250684
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.233577,
+                    0.30073
+                  ],
+                  "estimate": 0.264234
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.624118,
+                    0.760927
+                  ],
+                  "estimate": 0.689749
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.51845,
+                    0.637887
+                  ],
+                  "estimate": 0.577075
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.620409,
+                    0.758846
+                  ],
+                  "estimate": 0.688742
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.844314,
+                    0.898265
+                  ],
+                  "estimate": 0.871563
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.335766,
+                    0.408759
+                  ],
+                  "estimate": 0.369343
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.188321,
+                    0.253321
+                  ],
+                  "estimate": 0.220438
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.74722,
+                    0.862261
+                  ],
+                  "estimate": 0.80663
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.5,
+                    0.648898
+                  ],
+                  "estimate": 0.574586
+                }
+              },
+              "n": 685,
+              "n_churned": 181,
+              "status": "ok"
+            },
+            "Male": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.039168,
+                    0.014897
+                  ],
+                  "estimate": -0.011956
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.20469,
+                    0.27522
+                  ],
+                  "estimate": 0.239171
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.054921,
+                    0.101135
+                  ],
+                  "estimate": 0.077213
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.236777,
+                    0.271829
+                  ],
+                  "estimate": 0.254619
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.232044,
+                    0.299724
+                  ],
+                  "estimate": 0.266575
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.616501,
+                    0.7551
+                  ],
+                  "estimate": 0.679104
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.46629,
+                    0.589563
+                  ],
+                  "estimate": 0.527881
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.642815,
+                    0.789163
+                  ],
+                  "estimate": 0.715278
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.824682,
+                    0.882107
+                  ],
+                  "estimate": 0.853854
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.337017,
+                    0.40404
+                  ],
+                  "estimate": 0.371547
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.168508,
+                    0.229282
+                  ],
+                  "estimate": 0.198895
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.674312,
+                    0.794777
+                  ],
+                  "estimate": 0.735751
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.459521,
+                    0.605639
+                  ],
+                  "estimate": 0.533679
+                }
+              },
+              "n": 724,
+              "n_churned": 193,
+              "status": "ok"
+            }
+          }
+        },
+        "partner": {
+          "differences": {
+            "Yes_minus_No": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.036185,
+                  0.038208
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.001986
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  -0.220762,
+                  -0.123072
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.175126
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  -0.129988,
+                  -0.058618
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.093105
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  -0.155356,
+                  -0.110794
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.134467
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  -0.18008,
+                  -0.089782
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.136452
+              },
+              "pr_auc": {
+                "ci95": [
+                  -0.167724,
+                  0.039219
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.067746
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  -0.122379,
+                  0.057979
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.032663
+              },
+              "precision@high_band": {
+                "ci95": [
+                  -0.098426,
+                  0.143822
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.020257
+              },
+              "roc_auc": {
+                "ci95": [
+                  -0.011317,
+                  0.071746
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.029231
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  -0.283271,
+                  -0.190353
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.23927
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  -0.215763,
+                  -0.134086
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.175796
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  -0.236313,
+                  -0.052574
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.15153
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  -0.27546,
+                  -0.070575
+                ],
+                "ci_excludes_zero": true,
+                "estimate": -0.177028
+              }
+            }
+          },
+          "groups": {
+            "No": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.0402,
+                    0.016446
+                  ],
+                  "estimate": -0.01374
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.279158,
+                    0.364568
+                  ],
+                  "estimate": 0.32321
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.107109,
+                    0.166859
+                  ],
+                  "estimate": 0.136659
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.301595,
+                    0.339089
+                  ],
+                  "estimate": 0.321037
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.298701,
+                    0.365837
+                  ],
+                  "estimate": 0.334776
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.644564,
+                    0.773294
+                  ],
+                  "estimate": 0.709085
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.50994,
+                    0.610338
+                  ],
+                  "estimate": 0.56305
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.631316,
+                    0.754597
+                  ],
+                  "estimate": 0.695652
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.811062,
+                    0.869163
+                  ],
+                  "estimate": 0.842364
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.453102,
+                    0.525253
+                  ],
+                  "estimate": 0.492063
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.263312,
+                    0.33189
+                  ],
+                  "estimate": 0.298701
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.775717,
+                    0.873167
+                  ],
+                  "estimate": 0.827586
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.552401,
+                    0.681932
+                  ],
+                  "estimate": 0.62069
+                }
+              },
+              "n": 693,
+              "n_churned": 232,
+              "status": "ok"
+            },
+            "Yes": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.033722,
+                    0.011314
+                  ],
+                  "estimate": -0.011754
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.121656,
+                    0.179278
+                  ],
+                  "estimate": 0.148084
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.027891,
+                    0.060178
+                  ],
+                  "estimate": 0.043554
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.172629,
+                    0.203033
+                  ],
+                  "estimate": 0.18657
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.170391,
+                    0.22905
+                  ],
+                  "estimate": 0.198324
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.562201,
+                    0.720351
+                  ],
+                  "estimate": 0.641339
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.459863,
+                    0.603715
+                  ],
+                  "estimate": 0.530387
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.612311,
+                    0.81566
+                  ],
+                  "estimate": 0.715909
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.841188,
+                    0.901561
+                  ],
+                  "estimate": 0.871595
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.223464,
+                    0.287709
+                  ],
+                  "estimate": 0.252793
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.102619,
+                    0.146648
+                  ],
+                  "estimate": 0.122905
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.611221,
+                    0.751017
+                  ],
+                  "estimate": 0.676056
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.372093,
+                    0.520142
+                  ],
+                  "estimate": 0.443662
+                }
+              },
+              "n": 716,
+              "n_churned": 142,
+              "status": "ok"
+            }
+          }
+        },
+        "senior_citizen": {
+          "differences": {
+            "1_minus_0": {
+              "calibration_gap": {
+                "ci95": [
+                  -0.055369,
+                  0.054042
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.003496
+              },
+              "fpr@best_f1": {
+                "ci95": [
+                  0.121166,
+                  0.28688
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.205247
+              },
+              "fpr@high_band": {
+                "ci95": [
+                  0.038732,
+                  0.172243
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.102904
+              },
+              "mean_predicted_risk": {
+                "ci95": [
+                  0.105125,
+                  0.177886
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.142682
+              },
+              "observed_churn_rate": {
+                "ci95": [
+                  0.073832,
+                  0.210902
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.146178
+              },
+              "pr_auc": {
+                "ci95": [
+                  -0.07578,
+                  0.146081
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.033587
+              },
+              "precision@best_f1": {
+                "ci95": [
+                  -0.066332,
+                  0.129848
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.033785
+              },
+              "precision@high_band": {
+                "ci95": [
+                  -0.108904,
+                  0.13093
+                ],
+                "ci_excludes_zero": false,
+                "estimate": 0.010737
+              },
+              "roc_auc": {
+                "ci95": [
+                  -0.099666,
+                  0.015716
+                ],
+                "ci_excludes_zero": false,
+                "estimate": -0.042379
+              },
+              "selection_rate@best_f1": {
+                "ci95": [
+                  0.185636,
+                  0.328289
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.25504
+              },
+              "selection_rate@high_band": {
+                "ci95": [
+                  0.117289,
+                  0.262074
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.187933
+              },
+              "tpr@best_f1": {
+                "ci95": [
+                  0.043003,
+                  0.215021
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.129616
+              },
+              "tpr@high_band": {
+                "ci95": [
+                  0.039488,
+                  0.267506
+                ],
+                "ci_excludes_zero": true,
+                "estimate": 0.154429
+              }
+            }
+          },
+          "groups": {
+            "0": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.031496,
+                    0.00724
+                  ],
+                  "estimate": -0.012147
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.172259,
+                    0.223496
+                  ],
+                  "estimate": 0.197531
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.054682,
+                    0.087408
+                  ],
+                  "estimate": 0.070707
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.214247,
+                    0.243049
+                  ],
+                  "estimate": 0.228909
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.218058,
+                    0.264055
+                  ],
+                  "estimate": 0.241056
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.628442,
+                    0.73361
+                  ],
+                  "estimate": 0.6783
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.497254,
+                    0.592611
+                  ],
+                  "estimate": 0.542857
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.640361,
+                    0.760609
+                  ],
+                  "estimate": 0.698565
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.847676,
+                    0.889859
+                  ],
+                  "estimate": 0.867471
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.300681,
+                    0.354344
+                  ],
+                  "estimate": 0.327939
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.151171,
+                    0.201022
+                  ],
+                  "estimate": 0.178024
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.689542,
+                    0.789576
+                  ],
+                  "estimate": 0.738516
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.455533,
+                    0.573042
+                  ],
+                  "estimate": 0.515901
+                }
+              },
+              "n": 1174,
+              "n_churned": 283,
+              "status": "ok"
+            },
+            "1": {
+              "metrics": {
+                "calibration_gap": {
+                  "ci95": [
+                    -0.067077,
+                    0.036639
+                  ],
+                  "estimate": -0.015643
+                },
+                "fpr@best_f1": {
+                  "ci95": [
+                    0.324955,
+                    0.481091
+                  ],
+                  "estimate": 0.402778
+                },
+                "fpr@high_band": {
+                  "ci95": [
+                    0.114523,
+                    0.239411
+                  ],
+                  "estimate": 0.173611
+                },
+                "mean_predicted_risk": {
+                  "ci95": [
+                    0.337406,
+                    0.405618
+                  ],
+                  "estimate": 0.371591
+                },
+                "observed_churn_rate": {
+                  "ci95": [
+                    0.319149,
+                    0.451064
+                  ],
+                  "estimate": 0.387234
+                },
+                "pr_auc": {
+                  "ci95": [
+                    0.619422,
+                    0.809182
+                  ],
+                  "estimate": 0.711887
+                },
+                "precision@best_f1": {
+                  "ci95": [
+                    0.49263,
+                    0.664231
+                  ],
+                  "estimate": 0.576642
+                },
+                "precision@high_band": {
+                  "ci95": [
+                    0.608118,
+                    0.809293
+                  ],
+                  "estimate": 0.709302
+                },
+                "roc_auc": {
+                  "ci95": [
+                    0.777588,
+                    0.876276
+                  ],
+                  "estimate": 0.825092
+                },
+                "selection_rate@best_f1": {
+                  "ci95": [
+                    0.516915,
+                    0.646809
+                  ],
+                  "estimate": 0.582979
+                },
+                "selection_rate@high_band": {
+                  "ci95": [
+                    0.302128,
+                    0.434043
+                  ],
+                  "estimate": 0.365957
+                },
+                "tpr@best_f1": {
+                  "ci95": [
+                    0.797857,
+                    0.931848
+                  ],
+                  "estimate": 0.868132
+                },
+                "tpr@high_band": {
+                  "ci95": [
+                    0.580275,
+                    0.771956
+                  ],
+                  "estimate": 0.67033
+                }
+              },
+              "n": 235,
+              "n_churned": 91,
+              "status": "ok"
+            }
+          }
+        }
+      },
+      "n_customers": 1409
+    }
+  },
+  "method": "bootstrap percentile 95% intervals over customers, 500 resamples, seed 42",
+  "model_version": "churn-lr-633166dbf0",
+  "thresholds": {
+    "best_f1": 0.29,
+    "high_band": 0.5
+  }
+}

@@ -12,6 +12,7 @@ from retainai.data.load import dataset_sha256, load_raw
 from retainai.data.validate import render_text, validate_raw
 from retainai.features.build import DEFAULT_SPEC, derive_features, model_ready_frame
 from retainai.explain.linear import LinearExplainer
+from retainai.fairness.audit import run_fairness_audit
 from retainai.io import write_csv, write_json
 from retainai.models.baseline import run_baseline
 from retainai.models.registry import build_metadata, load_artifacts, save_artifacts
@@ -89,6 +90,17 @@ def _cmd_train(args: argparse.Namespace) -> int:
             for name, row in importance.iterrows()
         ],
     }
+    fairness = run_fairness_audit(
+        run.oof,
+        run.holdout_pred,
+        cleaned,
+        run.spec,
+        {**run.operating_thresholds, "high_band": config.RISK_BAND_CUTOFFS["HIGH"]},
+        n_boot=args.bootstrap,
+        seed=args.seed,
+    )
+    fairness["model_version"] = metadata["model_version"]
+    write_json(fairness, args.fairness_report)
     run.report["model_version"] = metadata["model_version"]
     run.report["risk_bands"] = bands
     run.report["global_explanation"] = global_explanation
@@ -96,6 +108,7 @@ def _cmd_train(args: argparse.Namespace) -> int:
     save_artifacts(run.final_model, metadata, args.model_dir)
     print_training_summary(run, metadata)
     print(f"Report written: {args.report}")
+    print(f"Fairness audit written: {args.fairness_report} (descriptive; not a fairness verdict)")
     print(f"Model written:  {args.model_dir}")
     return 0
 
@@ -207,6 +220,8 @@ def build_parser() -> argparse.ArgumentParser:
     p_train.add_argument("--report", default=str(config.REPORTS_DIR / config.BASELINE_REPORT_NAME))
     p_train.add_argument("--seed", type=int, default=config.SEED)
     p_train.add_argument("--n-repeats", type=int, default=3)
+    p_train.add_argument("--fairness-report", default=str(config.REPORTS_DIR / "fairness_audit.json"))
+    p_train.add_argument("--bootstrap", type=int, default=500, help="Bootstrap resamples for the subgroup audit")
     p_train.set_defaults(func=_cmd_train)
 
     p_score = sub.add_parser("score", help="Generate risk scores for a raw-format customer CSV")
