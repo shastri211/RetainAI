@@ -27,7 +27,12 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def _sha(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    """SHA-256 of file content with line endings normalised to LF.
+
+    Git on Windows (autocrlf) checks committed text files out with CRLF while the pipeline writes LF, so
+    comparing a regenerated file with a checked-out one must ignore line endings (as the dataset hash does).
+    """
+    return hashlib.sha256(path.read_bytes().replace(b"\r\n", b"\n")).hexdigest()
 
 
 @pytest.fixture(scope="module")
