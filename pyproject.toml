@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "retainai"
+version = "0.1.0"
+description = "Retention decision-support foundation: churn risk, model-grounded reasons and value exposure."
+readme = "README.md"
+requires-python = ">=3.13"
+# Version ranges here are intentionally loose; exact tested versions are pinned in requirements.txt.
+dependencies = [
+    "numpy>=2.5,<3",
+    "pandas>=3.0,<4",
+    "scikit-learn>=1.9,<2",
+    "pydantic>=2.13,<3",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=9,<10"]
+
+[project.scripts]
+retainai = "retainai.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

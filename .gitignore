@@ -25,3 +25,16 @@ Thumbs.db
 
 # Logs
 *.log
+
+# Generated artefacts (reproducible from data/raw via the CLI)
+data/processed/*
+!data/processed/.gitkeep
+data/external/*
+!data/external/.gitkeep
+models/*
+!models/.gitkeep
+
+# Build / test caches
+*.egg-info/
+build/
+.pytest_cache/
