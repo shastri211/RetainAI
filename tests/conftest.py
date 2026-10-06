@@ -147,3 +147,16 @@ def synthetic_cleaned() -> pd.DataFrame:
     from retainai.data.clean import clean_telco
 
     return clean_telco(synthetic_raw())
+
+
+def pytest_addoption(parser):
+    parser.addoption("--runslow", action="store_true", default=False, help="run tests marked slow")
+
+
+def pytest_collection_modifyitems(config, items):
+    if config.getoption("--runslow"):
+        return
+    skip = pytest.mark.skip(reason="slow: use --runslow to run")
+    for item in items:
+        if "slow" in item.keywords:
+            item.add_marker(skip)

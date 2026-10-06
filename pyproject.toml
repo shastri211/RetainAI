@@ -28,3 +28,4 @@ where = ["src"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 addopts = "-q"
+markers = ["slow: retrains on the full real dataset (~2-3 minutes); run with --runslow"]
