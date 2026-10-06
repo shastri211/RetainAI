@@ -1,0 +1,334 @@
+{
+  "checks": [
+    {
+      "check_id": "required_columns",
+      "count": 0,
+      "details": {
+        "missing": []
+      },
+      "message": "Required columns are present.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "unexpected_columns",
+      "count": 0,
+      "details": {
+        "unexpected": []
+      },
+      "message": "No columns outside the contract.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "non_empty",
+      "count": 0,
+      "details": {},
+      "message": "Table has at least one row.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "customer_id_missing",
+      "count": 0,
+      "details": {},
+      "message": "Every row has a customerID.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "customer_id_unique",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "customerID values are unique.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "customer_id_format",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "customerID matches ^\\d{4}-[A-Z]{5}$ (informational; format is not relied on).",
+      "severity": "WARNING",
+      "triggered": false
+    },
+    {
+      "check_id": "string_padding",
+      "count": 0,
+      "details": {
+        "by_column": {}
+      },
+      "message": "No leading/trailing whitespace in text fields.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "missing_values",
+      "count": 0,
+      "details": {
+        "by_column": {}
+      },
+      "message": "No blank cells outside TotalCharges.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "tenure_numeric",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "tenure is a whole number.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "tenure_non_negative",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "tenure >= 0.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "tenure_plausible_range",
+      "count": 0,
+      "details": {
+        "observed_max": 72.0
+      },
+      "message": "tenure <= 120 months.",
+      "severity": "WARNING",
+      "triggered": false
+    },
+    {
+      "check_id": "monthly_charges_numeric",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "MonthlyCharges is a finite number.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "monthly_charges_positive",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "MonthlyCharges > 0.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "total_charges_numeric",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "Non-blank TotalCharges is a finite number.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "total_charges_non_negative",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "TotalCharges >= 0.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "senior_citizen_binary",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "SeniorCitizen is 0 or 1.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "total_charges_blank_with_tenure",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "Blank TotalCharges is only acceptable when tenure == 0.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "known_issue_ki1_blank_total_charges",
+      "count": 11,
+      "details": {
+        "churn_values": [
+          "No"
+        ],
+        "sample_ids": [
+          "4472-LVYGI",
+          "3115-CZMZD",
+          "5709-LVOEQ",
+          "4367-NUYAO",
+          "1371-DWPAZ"
+        ]
+      },
+      "message": "KI-1: blank TotalCharges on tenure == 0 rows. Rule: treated as 0.0 (nothing billed yet) and flagged.",
+      "severity": "WARNING",
+      "triggered": true
+    },
+    {
+      "check_id": "total_charges_zero_tenure",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "tenure == 0 implies no billed total.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "total_charges_positive_with_tenure",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "tenure > 0 implies a positive billed total.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "categorical_domains",
+      "count": 0,
+      "details": {
+        "invalid_values_by_column": {}
+      },
+      "message": "Categorical columns only contain contract values.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "target_label_validity",
+      "count": 0,
+      "details": {
+        "invalid_values": []
+      },
+      "message": "Churn is 'Yes' or 'No'.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "target_both_classes",
+      "count": 0,
+      "details": {},
+      "message": "Both churn classes are present.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "target_prevalence",
+      "count": 1869,
+      "details": {
+        "negative": 5174,
+        "positive": 1869,
+        "positive_rate": 0.26537
+      },
+      "message": "Churn prevalence (informational).",
+      "severity": "INFO",
+      "triggered": false
+    },
+    {
+      "check_id": "structural_multiple_lines",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "MultipleLines == 'No phone service' exactly when PhoneService == 'No'.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "structural_internet_addons",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "Add-on columns == 'No internet service' exactly when InternetService == 'No'.",
+      "severity": "ERROR",
+      "triggered": false
+    },
+    {
+      "check_id": "known_issue_ki4_total_vs_tenure_x_monthly",
+      "count": 7032,
+      "details": {
+        "rel_dev_max": 0.5735,
+        "rel_dev_median": 0.0,
+        "rel_dev_min": -0.3106,
+        "rel_dev_p05": -0.0755,
+        "rel_dev_p95": 0.0748,
+        "rows_compared": 7032,
+        "share_within_tight_band": 0.5,
+        "tight_band": 0.02
+      },
+      "message": "KI-4: TotalCharges is NOT assumed equal to tenure x MonthlyCharges; the deviation is reported, not corrected.",
+      "severity": "INFO",
+      "triggered": false
+    },
+    {
+      "check_id": "total_charges_gross_deviation",
+      "count": 0,
+      "details": {
+        "sample_ids": []
+      },
+      "message": "TotalCharges within +/-100% of tenure x MonthlyCharges.",
+      "severity": "WARNING",
+      "triggered": false
+    },
+    {
+      "check_id": "known_issue_ki2_duplicate_rows",
+      "count": 22,
+      "details": {
+        "extra_rows": 22,
+        "groups": 20,
+        "tenure_of_duplicated_rows": {
+          "1": 42
+        }
+      },
+      "message": "KI-2: rows identical on every non-ID column. Rule: kept (distinct customerIDs), grouped for split safety.",
+      "severity": "WARNING",
+      "triggered": true
+    },
+    {
+      "check_id": "known_issue_ki3_contract_within_first_term",
+      "count": 244,
+      "details": {
+        "One year": {
+          "churned": 8,
+          "rows": 102
+        },
+        "Two year": {
+          "churned": 0,
+          "rows": 142
+        }
+      },
+      "message": "KI-3: fixed-term contracts with tenure shorter than the term. Plausible (still in first term); not an error. Time reference of Contract is undocumented.",
+      "severity": "INFO",
+      "triggered": false
+    }
+  ],
+  "dataset_sha256": "16320c9c1ec72448db59aa0a26a0b95401046bef5d02fd3aeb906448e3055e91",
+  "n_columns": 21,
+  "n_errors": 0,
+  "n_rows": 7043,
+  "n_warnings": 2,
+  "passed": true,
+  "provenance_label": "PUBLIC"
+}
