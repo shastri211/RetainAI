@@ -33,9 +33,17 @@ class DataContractError(ValueError):
         super().__init__(f"Dataset contract violated: {summary}")
 
 
-def clean_telco(df_raw: pd.DataFrame, report: ValidationReport | None = None) -> pd.DataFrame:
-    """Return the cleaned table. Raises ``DataContractError`` if validation has errors."""
-    report = report if report is not None else validate_raw(df_raw)
+def clean_telco(
+    df_raw: pd.DataFrame,
+    report: ValidationReport | None = None,
+    require_target: bool = True,
+) -> pd.DataFrame:
+    """Return the cleaned table. Raises ``DataContractError`` if validation has errors.
+
+    With ``require_target=False`` (scoring new customers) the ``churn`` column is omitted when the
+    raw table has no ``Churn`` column.
+    """
+    report = report if report is not None else validate_raw(df_raw, require_target=require_target)
     if not report.passed:
         raise DataContractError(report)
 
@@ -43,7 +51,7 @@ def clean_telco(df_raw: pd.DataFrame, report: ValidationReport | None = None) ->
     out = pd.DataFrame(index=df.index)
 
     # Duplicate groups are defined on the raw non-ID columns, numbered by first appearance.
-    non_id = [c for c in schema.RAW_COLUMNS if c != schema.RAW_ID]
+    non_id = [c for c in schema.RAW_COLUMNS if c in df.columns and c != schema.RAW_ID]
     group_id = df.groupby(non_id, sort=False).ngroup()
     group_size = group_id.map(group_id.value_counts())
 
@@ -52,6 +60,8 @@ def clean_telco(df_raw: pd.DataFrame, report: ValidationReport | None = None) ->
     total = pd.to_numeric(df["TotalCharges"].where(~blank_total, "0")).astype("float64")
 
     for raw_col in schema.RAW_COLUMNS:
+        if raw_col not in df.columns:
+            continue
         clean_col = schema.RAW_TO_CLEAN[raw_col]
         if raw_col == schema.RAW_ID:
             out[clean_col] = df[raw_col].astype(object)
@@ -74,4 +84,4 @@ def clean_telco(df_raw: pd.DataFrame, report: ValidationReport | None = None) ->
     out["duplicate_group_size"] = group_size.astype("int64").to_numpy()
     out["contract_term_exceeds_tenure"] = ((term > 1) & (tenure < term)).to_numpy()
 
-    return out.loc[:, list(schema.CLEAN_COLUMNS)].reset_index(drop=True)
+    return out.loc[:, [c for c in schema.CLEAN_COLUMNS if c in out.columns]].reset_index(drop=True)

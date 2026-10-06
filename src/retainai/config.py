@@ -13,6 +13,7 @@ MODELS_DIR = ROOT / "models"
 REPORTS_DIR = ROOT / "reports"
 
 CLEANED_CSV_NAME = "telco_cleaned.csv"
+FEATURES_CSV_NAME = "telco_features.csv"
 VALIDATION_REPORT_NAME = "data_validation.json"
 
 SEED = 42

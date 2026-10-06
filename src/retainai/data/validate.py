@@ -102,12 +102,16 @@ def _result(
     return CheckResult(check_id, severity, count > 0, int(count), message, details or {})
 
 
-def validate_raw(df: pd.DataFrame) -> ValidationReport:
-    """Validate a raw Telco table (all fields as text, as produced by ``load_raw``)."""
+def validate_raw(df: pd.DataFrame, require_target: bool = True) -> ValidationReport:
+    """Validate a raw Telco table (all fields as text, as produced by ``load_raw``).
+
+    With ``require_target=False`` the ``Churn`` column may be absent (scoring new customers);
+    if it is present it is still validated.
+    """
     checks: list[CheckResult] = []
     add = checks.append
 
-    missing = [c for c in schema.RAW_COLUMNS if c not in df.columns]
+    missing = [c for c in schema.RAW_COLUMNS if c not in df.columns and (require_target or c != schema.RAW_TARGET)]
     extra = [c for c in df.columns if c not in schema.RAW_COLUMNS]
     add(_result("required_columns", Severity.ERROR, len(missing), "Required columns are present.", {"missing": missing}))
     add(_result("unexpected_columns", Severity.ERROR, len(extra), "No columns outside the contract.", {"unexpected": extra}))
@@ -116,6 +120,8 @@ def validate_raw(df: pd.DataFrame) -> ValidationReport:
         return ValidationReport(len(df), df.shape[1], checks)
 
     df = df.astype("string").fillna("")
+    present = [c for c in schema.RAW_COLUMNS if c in df.columns]
+    has_target = schema.RAW_TARGET in df.columns
 
     # --- identifiers ---------------------------------------------------------------------
     ids = df[schema.RAW_ID]
@@ -144,7 +150,7 @@ def validate_raw(df: pd.DataFrame) -> ValidationReport:
     # --- whitespace padding ----------------------------------------------------------------
     padded = {
         c: int((df[c] != df[c].str.strip()).sum())
-        for c in schema.RAW_COLUMNS
+        for c in present
         if c != "TotalCharges"  # blank TotalCharges is the known " " case (KI-1)
     }
     padded = {c: n for c, n in padded.items() if n}
@@ -152,7 +158,7 @@ def validate_raw(df: pd.DataFrame) -> ValidationReport:
 
     # --- missing values (blank cells) -----------------------------------------------------
     blank_by_col = {
-        c: int(_blank(df[c]).sum()) for c in schema.RAW_COLUMNS if c != "TotalCharges"
+        c: int(_blank(df[c]).sum()) for c in present if c != "TotalCharges"
     }
     blank_by_col = {c: n for c, n in blank_by_col.items() if n}
     add(_result("missing_values", Severity.ERROR, sum(blank_by_col.values()), "No blank cells outside TotalCharges.", {"by_column": blank_by_col}))
@@ -204,7 +210,7 @@ def validate_raw(df: pd.DataFrame) -> ValidationReport:
             Severity.WARNING,
             int(blank_new.sum()),
             "KI-1: blank TotalCharges on tenure == 0 rows. Rule: treated as 0.0 (nothing billed yet) and flagged.",
-            {"sample_ids": _sample_ids(df, blank_new), "churn_values": sorted(set(df.loc[blank_new, schema.RAW_TARGET]))},
+            {"sample_ids": _sample_ids(df, blank_new), "churn_values": sorted(set(df.loc[blank_new, schema.RAW_TARGET])) if has_target else []},
         )
     )
     total_with_zero_tenure = total.notna() & (tenure == 0) & (total > 0)
@@ -229,22 +235,24 @@ def validate_raw(df: pd.DataFrame) -> ValidationReport:
     )
 
     # --- target ----------------------------------------------------------------------------
-    target = df[schema.RAW_TARGET]
-    target_bad = ~target.isin(schema.TARGET_ENCODING)
-    add(_result("target_label_validity", Severity.ERROR, int(target_bad.sum()), "Churn is 'Yes' or 'No'.", {"invalid_values": sorted(set(target[target_bad]))[:10]}))
-    present = set(target[~target_bad])
-    add(_result("target_both_classes", Severity.ERROR, int(len(present) < 2), "Both churn classes are present."))
-    n_pos = int((target == schema.POSITIVE_LABEL).sum())
-    add(
-        CheckResult(
-            "target_prevalence",
-            Severity.INFO,
-            False,
-            n_pos,
-            "Churn prevalence (informational).",
-            {"positive": n_pos, "negative": int((target == schema.NEGATIVE_LABEL).sum()), "positive_rate": round(n_pos / len(df), 6)},
+    target = df[schema.RAW_TARGET] if has_target else pd.Series("", index=df.index, dtype="string")
+    if has_target:
+        target_bad = ~target.isin(schema.TARGET_ENCODING)
+        add(_result("target_label_validity", Severity.ERROR, int(target_bad.sum()), "Churn is 'Yes' or 'No'.", {"invalid_values": sorted(set(target[target_bad]))[:10]}))
+        present_labels = set(target[~target_bad])
+        if require_target:
+            add(_result("target_both_classes", Severity.ERROR, int(len(present_labels) < 2), "Both churn classes are present."))
+        n_pos = int((target == schema.POSITIVE_LABEL).sum())
+        add(
+            CheckResult(
+                "target_prevalence",
+                Severity.INFO,
+                False,
+                n_pos,
+                "Churn prevalence (informational).",
+                {"positive": n_pos, "negative": int((target == schema.NEGATIVE_LABEL).sum()), "positive_rate": round(n_pos / len(df), 6)},
+            )
         )
-    )
 
     # --- structural consistency --------------------------------------------------------------
     ml_inconsistent = (df["PhoneService"] == "No") != (df["MultipleLines"] == "No phone service")
@@ -294,7 +302,7 @@ def validate_raw(df: pd.DataFrame) -> ValidationReport:
         )
 
     # --- KI-2: duplicate rows across all non-ID columns ----------------------------------------
-    non_id = [c for c in schema.RAW_COLUMNS if c != schema.RAW_ID]
+    non_id = [c for c in present if c != schema.RAW_ID]
     dup_all = df.duplicated(subset=non_id, keep=False)
     extra_rows = int(df.duplicated(subset=non_id, keep="first").sum())
     add(
