@@ -1,0 +1,40 @@
+{
+  "assumed_months": 12,
+  "bands": [
+    {
+      "band": "LOW",
+      "customers": 4008,
+      "monthly_revenue": 227822.45,
+      "revenue_at_risk_monthly": 20110.33,
+      "share_of_revenue_at_risk": 0.1445
+    },
+    {
+      "band": "MEDIUM",
+      "customers": 1461,
+      "monthly_revenue": 102492.5,
+      "revenue_at_risk_monthly": 37827.79,
+      "share_of_revenue_at_risk": 0.2718
+    },
+    {
+      "band": "HIGH",
+      "customers": 1574,
+      "monthly_revenue": 125801.65,
+      "revenue_at_risk_monthly": 81215.31,
+      "share_of_revenue_at_risk": 0.5836
+    }
+  ],
+  "basis": {
+    "clv_at_risk_proxy": "DERIVED + ASSUMED: risk_score x clv_proxy",
+    "clv_proxy": "ASSUMED: monthly_revenue x assumed_months; revenue not margin; not a survival-based or true CLV",
+    "monthly_revenue": "OBSERVED: MonthlyCharges as reported",
+    "revenue_at_risk_monthly": "DERIVED: risk_score x monthly_revenue; risk-weighted recurring revenue, no time horizon implied",
+    "revenue_to_date": "OBSERVED: TotalCharges as reported (0.0 where never billed)"
+  },
+  "model_version": "churn-lr-633166dbf0",
+  "observed_monthly_revenue_of_churned_customers": 139130.85,
+  "observed_note": "Label-based, for comparison only. Equals the risk-weighted total only if the model is well calibrated, and scoring the training file is in-sample.",
+  "provenance_label": "PUBLIC",
+  "scoring_context": "in_sample",
+  "total_monthly_revenue": 456116.6,
+  "total_revenue_at_risk_monthly": 139153.43
+}

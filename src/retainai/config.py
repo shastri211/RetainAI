@@ -24,3 +24,7 @@ SEED = 42
 # 0.25 is about the dataset base rate (0.265); 0.50 is "more likely than not". They are communication
 # bands, not decision thresholds (threshold analysis lives in reports/baseline_metrics.json).
 RISK_BAND_CUTOFFS = {"MEDIUM": 0.25, "HIGH": 0.50}
+
+# ASSUMPTION (not estimated from data): number of future months of revenue treated as "at stake" in the CLV proxy.
+# Changing it rescales every CLV proxy proportionally. There is no margin, cost-to-serve or discount rate in the data.
+ASSUMED_VALUE_MONTHS = 12

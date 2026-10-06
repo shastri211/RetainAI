@@ -17,6 +17,7 @@ from retainai.models.baseline import run_baseline
 from retainai.models.registry import build_metadata, load_artifacts, save_artifacts
 from retainai.scoring.bands import risk_band_report
 from retainai.scoring.risk import records_to_frame, score_cleaned
+from retainai.value.proxy import band_summary, top_revenue_at_risk, value_table
 
 
 def _cmd_validate(args: argparse.Namespace) -> int:
@@ -131,6 +132,48 @@ def _cmd_score(args: argparse.Namespace) -> int:
     return 0
 
 
+def _cmd_value(args: argparse.Namespace) -> int:
+    path = Path(args.input)
+    raw = load_raw(path)
+    has_target = "Churn" in raw.columns
+    report = validate_raw(raw, require_target=has_target)
+    if not report.passed:
+        print(render_text(report), file=sys.stderr)
+        return 1
+    cleaned = clean_telco(raw, report, require_target=has_target)
+    model, metadata = load_artifacts(args.model_dir)
+    in_sample = dataset_sha256(path) == metadata["dataset"]["sha256_lf_normalised"]
+    records = score_cleaned(cleaned, model, metadata, in_sample=in_sample)
+    table = value_table(cleaned, records, assumed_months=args.assumed_months)
+    summary = band_summary(table, cleaned)
+    summary.update(
+        {
+            "model_version": metadata["model_version"],
+            "assumed_months": args.assumed_months,
+            "scoring_context": "in_sample" if in_sample else "out_of_sample",
+            "provenance_label": metadata["dataset"]["provenance_label"],
+        }
+    )
+
+    write_csv(table, args.output)
+    if args.summary:
+        write_json(summary, args.summary)
+    print(f"Revenue exposure for {len(table)} customers (model {metadata['model_version']}, assumed months={args.assumed_months})")
+    print(f"  total monthly revenue (observed):                 {summary['total_monthly_revenue']:>12,.2f}")
+    print(f"  risk-weighted monthly revenue at risk (derived):  {summary['total_revenue_at_risk_monthly']:>12,.2f}")
+    if "observed_monthly_revenue_of_churned_customers" in summary:
+        print(f"  observed monthly revenue of churned (label):      {summary['observed_monthly_revenue_of_churned_customers']:>12,.2f}")
+    for row in summary["bands"]:
+        print(f"  {row['band']:<7} customers={row['customers']:<5} revenue_at_risk={row['revenue_at_risk_monthly']:>11,.2f} share={row['share_of_revenue_at_risk']}")
+    print("Top 5 by risk-weighted monthly revenue:")
+    print(top_revenue_at_risk(table, 5)[["customer_id", "risk_score", "risk_band", "monthly_revenue", "revenue_at_risk_monthly"]].to_string(index=False))
+    print("NOTE: proxies only. No margin, horizon or true CLV exists in this dataset; clv_proxy uses an ASSUMED number of months.")
+    if in_sample:
+        print("WARNING: scored on the model's own training data (in-sample).")
+    print(f"Value table written: {args.output}")
+    return 0
+
+
 def print_training_summary(run, metadata: dict) -> None:
     print(f"Model version: {metadata['model_version']} ({metadata['model_type']})")
     print(f"{'candidate':<24}{'CV ROC-AUC':>12}{'CV PR-AUC':>12}{'holdout ROC':>13}{'holdout PR':>12}")
@@ -173,6 +216,19 @@ def build_parser() -> argparse.ArgumentParser:
     p_score.add_argument("--top-k", type=int, default=3, help="Max risk-increasing reasons per customer")
     p_score.add_argument("--no-reasons", action="store_true", help="Skip model-grounded reasons")
     p_score.set_defaults(func=_cmd_score)
+
+    p_value = sub.add_parser("value", help="Compute revenue-at-risk proxies from risk scores")
+    p_value.add_argument("--input", default=str(config.RAW_CSV))
+    p_value.add_argument("--model-dir", default=str(config.MODEL_DIR))
+    p_value.add_argument("--output", default=str(config.PROCESSED_DIR / "value_at_risk.csv"))
+    p_value.add_argument("--summary", default=str(config.REPORTS_DIR / "value_summary.json"))
+    p_value.add_argument(
+        "--assumed-months",
+        type=float,
+        default=config.ASSUMED_VALUE_MONTHS,
+        help="ASSUMED months of revenue treated as at stake in the CLV proxy",
+    )
+    p_value.set_defaults(func=_cmd_value)
 
     return parser
 
